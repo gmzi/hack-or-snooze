@@ -126,7 +126,6 @@ $(async function () {
     hideElements();
     await generateStories();
     $allStoriesList.show();
-    // $createStoryForm.hide();
   });
 
   /***
@@ -154,6 +153,7 @@ $(async function () {
 
     if (currentUser) {
       showNavForLoggedInUser();
+      loggedInStories();
     }
   }
 
@@ -213,6 +213,8 @@ $(async function () {
         <small class="article-author">by ${story.author}</small>
         <small class="article-hostname ${hostName}">(${hostName})</small>
         <small class="article-username">posted by ${story.username}</small>
+        <small class="hidden article-fav" id="btn-fav">Fav this article</small>
+        <small class="hidden article-fav-remove" id="btn-fav-remove">Unfav this article</small>
       </li>
     `);
 
@@ -263,4 +265,18 @@ $(async function () {
       localStorage.setItem('username', currentUser.username);
     }
   }
+
+  /* SHOW BUTTON TO FAV STORIES */
+  function loggedInStories() {
+    const btnFav = $('li #btn-fav');
+    for (let item of btnFav) {
+      btnFav.removeClass('hidden');
+    }
+  }
+
+  /* HANDLE CLICK ON FAV STORIES BUTTON */
+  $('li #btn-fav').on('click', function () {
+    console.log('dale');
+    // GO TO USER AND TRIGGER THE POST REQUEST
+  });
 });
