@@ -8,6 +8,7 @@ $(async function () {
   const $ownStories = $('#my-articles');
   const $navLogin = $('#nav-login');
   const $navLogOut = $('#nav-logout');
+  const $navFavs = $('#nav-favs');
 
   const $navCreateStory = $('#nav-create-story');
   const $createStoryForm = $('#create-story-form');
@@ -49,8 +50,12 @@ $(async function () {
       // update stories list:
       generateStories();
 
+      hideElements();
+
+      loggedInStories();
+
       // show the stories
-      $allStoriesList.show();
+      // $(loggedInStories()).appendTo($allStoriesList.show());
 
       return newStory;
     }
@@ -126,6 +131,9 @@ $(async function () {
     hideElements();
     await generateStories();
     $allStoriesList.show();
+    if (currentUser) {
+      loggedInStories();
+    }
   });
 
   /***
@@ -240,6 +248,7 @@ $(async function () {
     $navLogin.hide();
     $navLogOut.show();
     $navCreateStory.show();
+    $navFavs.show();
   }
 
   /* simple function to pull the hostname from a URL */
@@ -275,8 +284,14 @@ $(async function () {
   }
 
   /* HANDLE CLICK ON FAV STORIES BUTTON */
-  $('li #btn-fav').on('click', function () {
+  $('li #btn-fav').on('click', function (evt) {
     console.log('dale');
+    const username = currentUser.username;
+    const storyId = evt.target.parentElement.id;
+    const userToken = currentUser.loginToken;
+
+    User.addFav(username, storyId, userToken);
+
     // GO TO USER AND TRIGGER THE POST REQUEST
   });
 });

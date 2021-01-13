@@ -158,6 +158,14 @@ class User {
     );
     return existingUser;
   }
+
+  static async addFav(username, id, token) {
+    const response = await axios.post(
+      `${BASE_URL}/users/${username}/favorites/${id}`,
+      { token }
+    );
+    console.log(response);
+  }
 }
 
 /**
