@@ -425,8 +425,6 @@ async function ui() {
     });
   }
 
-  hideStory();
-
   /*  INFINITE SCROLL */
   function infiniteScroll() {
     let counter = 25;
