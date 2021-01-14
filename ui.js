@@ -214,8 +214,8 @@ async function ui() {
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
-        <small class="article-author">by ${story.author}</small>
         <small class="article-hostname ${hostName}">(${hostName})</small>
+        <small class="article-author">by ${story.author}</small>
         <small class="article-username">posted by ${story.username}</small>
         <small class="article-hide"> | hide</small>
         

@@ -21,16 +21,6 @@ h5 {
   font-weight: lighter;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-  margin: 0px 2px;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
 .hidden {
   display: none;
 }
@@ -136,11 +126,49 @@ form > hr {
   margin: 20px 5px;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  margin: 0px 2px;
+  cursor: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ARTICLES */
+
 .articles-list > li {
   color: gray;
   font-size: 0.8rem;
-  margin: 10px 0;
+  margin: 0.2rem 0;
+}
+
+strong {
   cursor: pointer;
+}
+
+.article-hostname {
+  /* align-items: flex-end;
+  display: block; */
+  margin-right: auto;
+}
+
+.article-hostname:hover {
+  text-decoration: underline;
+}
+
+.article-author {
+  display: ;
+  flex-direction: row;
+  /* margin-top: 5px;
+  margin-left: 25px; */
+}
+
+.article-username {
+  margin-top: 5px;
+  margin-left: 25px;
 }
 
 .star,
@@ -159,6 +187,10 @@ form > hr {
   color: darkblue;
 }
 
+.article-link {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 .article-link > strong {
   color: black;
   font-size: 0.85rem;
@@ -168,21 +200,6 @@ form > hr {
 
 .article-link:hover {
   text-decoration: none;
-}
-
-.article-hostname:hover {
-  text-decoration: underline;
-}
-
-.article-author {
-  margin-top: 5px;
-  margin-left: 25px;
-}
-
-.article-username {
-  display: block;
-  margin-top: 5px;
-  margin-left: 25px;
 }
 
 #favorited-articles,
