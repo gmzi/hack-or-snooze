@@ -19,13 +19,13 @@
       <a href="#" id="nav-user-profile"></a>
     </span>
       <a class="hidden" id="nav-create-story" href="#">
-        <small>/ Create new story / </small>
+        <small>| Create new story | </small>
       </a>
       <a class="hidden" id="nav-favs" href="#">
-        <small>My favorites / </small>
+        <small>My favorites | </small>
       </a>
       <a class="hidden" id="nav-logout" href="#">
-        <small>(logout)</small>
+        <small><span id="nav-username"></span> | (logout)</small>
       </a>
     
   </nav>
@@ -123,15 +123,25 @@
       </div>
       <button type="submit">Submit story</button>
     </form>
+    <h4 class="hidden" id="msg-done">Done!</h4>
   </section>
-  <section id="user-profile" class="container hidden">
+
+  <section id="favs-section" class="hidden">
+    <h4>favs</h4>
+    <ol id="favs-list">
+
+    </ol>
+    <button id="empty-favslist">remove all</button>
+  </section>
+
+  <!-- <section id="user-profile" class="container hidden">
     <h4>User Profile Info</h4>
     <section>
       <div id="profile-name">Name:</div>
       <div id="profile-username">Username:</div>
       <div id="profile-account-date">Account Created:</div>
     </section>
-  </section>
+  </section> -->
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>

@@ -43,10 +43,18 @@ class StoryList {
    * Returns the new story object
    */
 
-  async addStory(user, newStory) {
+  static async addStory(user, title, author, url) {
     // TODO - Implement this functions!
     // this function should return the newly created story so it can be used in
     // the script.js file where it will be appended to the DOM
+    // make the request:
+    const storyObj = await axios.post(
+      'https://hack-or-snooze-v3.herokuapp.com/stories',
+      { token: user.loginToken, story: { author, title, url } }
+    );
+    // make the new Story instance:
+    const newStory = new Story(storyObj.data.story);
+    return newStory;
   }
 }
 
@@ -164,7 +172,29 @@ class User {
       `${BASE_URL}/users/${username}/favorites/${id}`,
       { token }
     );
-    console.log(response);
+    // console.log(response.data.user.favorites);
+    // const favs = response.data.user.favorites;
+    // return favs;
+
+    // instantiate the user from the API information
+    const existingUser = new User(response.data.user);
+
+    // instantiate Story instances for the user's favorites and ownStories
+    existingUser.favorites = response.data.user.favorites.map(
+      (s) => new Story(s)
+    );
+    existingUser.ownStories = response.data.user.stories.map(
+      (s) => new Story(s)
+    );
+    return existingUser;
+  }
+
+  static async removeFav(username, id, token) {
+    const response = await axios.delete(
+      `https://hack-or-snooze-v3.herokuapp.com/users/${username}/favorites/${id}`,
+      { params: { token } }
+    );
+    console.log(response.data.user.favorites);
   }
 }
 

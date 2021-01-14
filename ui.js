@@ -25,7 +25,7 @@ $(async function () {
    * EVENT LISTENER FOR CREATESTORY FORM
    */
 
-  $createStoryForm.on('submit', async function (evt) {
+  $createStoryForm.on('submit', function (evt) {
     evt.preventDefault();
     // capture inputs:
     let title = $('#create-story-title').val();
@@ -36,30 +36,33 @@ $(async function () {
     if (title === '' || author === '' || url === '') {
       alert('all fields required');
     } else {
-      // make the request:
-      const storyObj = await axios.post(
-        'https://hack-or-snooze-v3.herokuapp.com/stories',
-        { token: currentUser.loginToken, story: { author, title, url } }
-      );
-      // make the new Story instance:
-      const newStory = new Story(storyObj.data.story);
+      StoryList.addStory(currentUser, title, author, url);
 
-      // clear form:
       $createStoryForm.trigger('reset');
+      $createStoryForm.hide();
 
       // update stories list:
       generateStories();
 
-      hideElements();
-
-      loggedInStories();
-
-      // show the stories
-      // $(loggedInStories()).appendTo($allStoriesList.show());
-
-      return newStory;
+      $('#msg-done').removeClass('hidden');
     }
   });
+  // THANK YOU CHRIS:
+  // this will work
+  // StoryList.getStories();
+
+  // this will not work because addStory is not static
+  // StoryList.addStory();
+
+  // const storyList = new StoryList();
+
+  // this will work
+  // storyList.addStory();
+
+  // this will not work
+  // storyList.getStories();
+
+  // ENDS CHRIS
 
   /**
    * Event listener for logging in.
@@ -128,19 +131,24 @@ $(async function () {
    */
 
   $('body').on('click', '#nav-all', async function () {
-    hideElements();
-    await generateStories();
-    $allStoriesList.show();
-    if (currentUser) {
-      loggedInStories();
-    }
+    // await checkIfLoggedIn();
+    // $('#msg-done').addClass('hidden');
+    // hideElements();
+    // await generateStories();
+    // $allStoriesList.show();
+    // if (currentUser) {
+    //   loggedInStories();
+    // }
+    location.reload();
   });
 
   /***
   EVENT HANDLER FOR NEW STORY LINK */
   $navCreateStory.on('click', function () {
     $allStoriesList.hide();
-    $createStoryForm.show();
+    $('#favs-section').hide();
+    $('#create-story').show();
+    $('#create-story-form').show();
   });
 
   /**
@@ -183,6 +191,8 @@ $(async function () {
 
     // update the navigation bar
     showNavForLoggedInUser();
+    loggedInStories();
+    // updateFavs();
   }
 
   /**
@@ -215,14 +225,15 @@ $(async function () {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
+      <small class="article-fav hidden" id="btn-fav">&#9734</small>
+      <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
         <small class="article-author">by ${story.author}</small>
         <small class="article-hostname ${hostName}">(${hostName})</small>
         <small class="article-username">posted by ${story.username}</small>
-        <small class="hidden article-fav" id="btn-fav">Fav this article</small>
-        <small class="hidden article-fav-remove" id="btn-fav-remove">Unfav this article</small>
+        
       </li>
     `);
 
@@ -249,6 +260,7 @@ $(async function () {
     $navLogOut.show();
     $navCreateStory.show();
     $navFavs.show();
+    $('#nav-username').text(currentUser.username);
   }
 
   /* simple function to pull the hostname from a URL */
@@ -277,21 +289,94 @@ $(async function () {
 
   /* SHOW BUTTON TO FAV STORIES */
   function loggedInStories() {
-    const btnFav = $('li #btn-fav');
-    for (let item of btnFav) {
-      btnFav.removeClass('hidden');
-    }
+    let list = Array.from($('li'));
+    let userFavs = currentUser.favorites;
+
+    let filteredNotFavs = [];
+
+    let filteredFavs = list.filter(function (val) {
+      for (let i = 0; i < userFavs.length; i++) {
+        if (userFavs[i].storyId.includes(val.id)) {
+          val.firstElementChild.nextElementSibling.classList.remove('hidden');
+          return val;
+        }
+      }
+      filteredNotFavs.push(val);
+    });
+    // console.log(filteredFavs);
+    // console.log(filteredNotFavs);
+    filteredNotFavs.forEach(function (val) {
+      val.firstElementChild.classList.remove('hidden');
+    });
   }
 
-  /* HANDLE CLICK ON FAV STORIES BUTTON */
-  $('li #btn-fav').on('click', function (evt) {
-    console.log('dale');
+  /* HANDLE CLICK TO FAV STORIES BUTTON */
+  $('li #btn-fav').on('click', async function (evt) {
     const username = currentUser.username;
     const storyId = evt.target.parentElement.id;
     const userToken = currentUser.loginToken;
 
-    User.addFav(username, storyId, userToken);
-
-    // GO TO USER AND TRIGGER THE POST REQUEST
+    const favsUpdated = await User.addFav(username, storyId, userToken);
+    evt.target.parentElement.firstElementChild.classList.add('hidden');
+    evt.target.parentElement.firstElementChild.nextElementSibling.classList.remove(
+      'hidden'
+    );
+    // update the local currentUser with the response of the API request:
+    currentUser.favorites = favsUpdated.favorites;
   });
+
+  /* HANDLE CLICK ON UNFAV STORIES BUTTON */
+  $('li #btn-fav-remove').on('click', async function (evt) {
+    const username = currentUser.username;
+    const storyId = evt.target.parentElement.id;
+    const userToken = currentUser.loginToken;
+
+    const favsUpdated = await User.removeFav(username, storyId, userToken);
+    evt.target.parentElement.firstElementChild.classList.remove('hidden');
+    evt.target.parentElement.firstElementChild.nextElementSibling.classList.add(
+      'hidden'
+    );
+    // update the local currentUser with the response of the API request:
+    currentUser.favorites = favsUpdated.favorites;
+  });
+
+  /* VIEW MY FAVORITES */
+
+  $navFavs.on('click', function (evt) {
+    const $favsList = $('#favs-list');
+    $favsList.empty();
+
+    $('#all-articles-list').hide();
+    $('#create-story').hide();
+    $('#favs-section').show();
+
+    updateFavs();
+  });
+
+  function updateFavs() {
+    const userFavs = currentUser.favorites;
+    const $favsList = $('#favs-list');
+    for (let i = 0; i < userFavs.length; i++) {
+      const result = generateStoryHTML(userFavs[i]);
+      $favsList.append(result.get()[0]);
+    }
+  }
+
+  /* CLEAN ALL FAVORITES */
+
+  $('#empty-favslist').on('click', function () {
+    removeAllFavorites();
+    $('#favs-list').empty();
+  });
+
+  function removeAllFavorites() {
+    userFavs = currentUser.favorites;
+    console.log(userFavs);
+    for (let fav of userFavs) {
+      let storyId = fav.storyId;
+      let username = currentUser.username;
+      let userToken = currentUser.loginToken;
+      User.removeFav(username, storyId, userToken);
+    }
+  }
 });
