@@ -35,6 +35,17 @@ class StoryList {
     return storyList;
   }
 
+  static async getInfiniteStories(skip) {
+    const response = await axios.get(`${BASE_URL}/stories?skip=${skip}`);
+
+    // turn the plain old story objects from the API into instances of the Story class
+    const stories = response.data.stories.map((story) => new Story(story));
+
+    // build an instance of our own class using the new array of stories
+    const storyList = new StoryList(stories);
+    return storyList;
+  }
+
   /**
    * Method to make a POST request to /stories and add the new story to the list
    * - user - the current instance of User who will post the story
@@ -66,7 +77,7 @@ class StoryList {
         },
       }
     );
-    console.log(response);
+    // console.log(response.status);
   }
 }
 

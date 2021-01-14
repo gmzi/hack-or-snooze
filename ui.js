@@ -12,6 +12,7 @@ $(async function () {
 
   const $navCreateStory = $('#nav-create-story');
   const $createStoryForm = $('#create-story-form');
+  const $btnFav = $('.btn-fav');
 
   // global storyList variable
   let storyList = null;
@@ -47,22 +48,6 @@ $(async function () {
       $('#msg-done').removeClass('hidden');
     }
   });
-  // THANK YOU CHRIS:
-  // this will work
-  // StoryList.getStories();
-
-  // this will not work because addStory is not static
-  // StoryList.addStory();
-
-  // const storyList = new StoryList();
-
-  // this will work
-  // storyList.addStory();
-
-  // this will not work
-  // storyList.getStories();
-
-  // ENDS CHRIS
 
   /**
    * Event listener for logging in.
@@ -227,7 +212,7 @@ $(async function () {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
-      <small class="article-fav" id="btn-fav">&#9734</small>
+      <small class="btn-fav">&#9734</small>
       <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
@@ -247,9 +232,10 @@ $(async function () {
     let hostName = getHostName(story.url);
 
     // render story markup
+    // <small class="article-fav" id="btn-fav">&#9734</small>
     const storyMarkup = $(`
       <li id="${story.storyId}">
-      <small class="article-fav" id="btn-fav">&#9734</small>
+      <small class="btn-fav">&#9734</small>
       <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
@@ -310,7 +296,7 @@ $(async function () {
     }
   }
 
-  /* SHOW BUTTON TO FAV STORIES */
+  /* SHOW FAVED STORIES */
   function loggedInStories() {
     let list = Array.from($('li'));
     let userFavs = currentUser.favorites;
@@ -335,39 +321,45 @@ $(async function () {
   }
 
   /* HANDLE CLICK TO FAV STORIES BUTTON */
-  $('li #btn-fav').on('click', async function (evt) {
-    if (currentUser) {
+  function btnFav() {
+    $('.btn-fav').on('click', async function (evt) {
+      if (currentUser) {
+        const username = currentUser.username;
+        const storyId = evt.target.parentElement.id;
+        const userToken = currentUser.loginToken;
+
+        const favsUpdated = await User.addFav(username, storyId, userToken);
+        evt.target.parentElement.firstElementChild.classList.add('hidden');
+        evt.target.parentElement.firstElementChild.nextElementSibling.classList.remove(
+          'hidden'
+        );
+        // update the local currentUser with the response of the API request:
+        currentUser.favorites = favsUpdated.favorites;
+      } else {
+        alert('must log in to fav');
+        showLoginForm();
+      }
+    });
+  }
+  btnFav();
+
+  /* HANDLE CLICK ON UNFAV STORIES BUTTON */
+  function btnUnfav() {
+    $('li #btn-fav-remove').on('click', async function (evt) {
       const username = currentUser.username;
       const storyId = evt.target.parentElement.id;
       const userToken = currentUser.loginToken;
 
-      const favsUpdated = await User.addFav(username, storyId, userToken);
-      evt.target.parentElement.firstElementChild.classList.add('hidden');
-      evt.target.parentElement.firstElementChild.nextElementSibling.classList.remove(
+      const favsUpdated = await User.removeFav(username, storyId, userToken);
+      evt.target.parentElement.firstElementChild.classList.remove('hidden');
+      evt.target.parentElement.firstElementChild.nextElementSibling.classList.add(
         'hidden'
       );
       // update the local currentUser with the response of the API request:
       currentUser.favorites = favsUpdated.favorites;
-    } else {
-      alert('must log in to fav');
-      showLoginForm();
-    }
-  });
-
-  /* HANDLE CLICK ON UNFAV STORIES BUTTON */
-  $('li #btn-fav-remove').on('click', async function (evt) {
-    const username = currentUser.username;
-    const storyId = evt.target.parentElement.id;
-    const userToken = currentUser.loginToken;
-
-    const favsUpdated = await User.removeFav(username, storyId, userToken);
-    evt.target.parentElement.firstElementChild.classList.remove('hidden');
-    evt.target.parentElement.firstElementChild.nextElementSibling.classList.add(
-      'hidden'
-    );
-    // update the local currentUser with the response of the API request:
-    currentUser.favorites = favsUpdated.favorites;
-  });
+    });
+  }
+  btnUnfav();
 
   /* VIEW MY FAVORITES */
 
@@ -415,15 +407,54 @@ $(async function () {
   }
 
   /* HIDE STORY */
-  $('.article-hide').on('click', function (evt) {
-    if (currentUser) {
-      const id = evt.target.parentElement.id;
-      const token = currentUser.loginToken;
-      StoryList.deleteStory(id, token);
-      evt.target.parentElement.remove();
-    } else {
-      alert('need to be logged in to hide');
-      showLoginForm();
-    }
-  });
+  function hideStory() {
+    $('.article-hide').on('click', async function (evt) {
+      console.log('clicked');
+      if (currentUser) {
+        const id = evt.target.parentElement.id;
+        const token = currentUser.loginToken;
+        const owner =
+          evt.target.parentElement.lastElementChild.previousElementSibling
+            .innerText;
+        console.log(owner);
+        console.log(currentUser.username);
+        if (owner.includes(currentUser.username)) {
+          await StoryList.deleteStory(id, token);
+          evt.target.parentElement.remove();
+        } else {
+          return alert('must own the story to delete it');
+        }
+      } else {
+        alert('need to be logged in and own the story to hide it');
+        showLoginForm();
+      }
+    });
+  }
+
+  hideStory();
+
+  /*  INFINITE SCROLL */
+  // function infiniteScroll() {
+  //   let counter = 25;
+  //   $(window).scroll(async function () {
+  //     if (
+  //       $(window).scrollTop() >=
+  //       $(document).height() - $(window).height() - 10
+  //     ) {
+  //       const moreStories = await StoryList.getInfiniteStories(counter);
+  //       if (moreStories.stories.length > 0) {
+  //         counter += 25;
+  //         moreList = moreStories;
+  //         for (let story of moreList.stories) {
+  //           const result = generateStoryHTML(story);
+  //           $(result).appendTo($('#all-articles-list'));
+  //         }
+  //       }
+  //       btnFav();
+  //       btnUnfav();
+  //     }
+  //     hideStory();
+  //   });
+  // }
+  // infiniteScroll();
 });
