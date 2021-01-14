@@ -56,6 +56,18 @@ class StoryList {
     const newStory = new Story(storyObj.data.story);
     return newStory;
   }
+
+  static async deleteStory(id, token) {
+    const response = await axios.delete(
+      `https://hack-or-snooze-v3.herokuapp.com/stories/${id}`,
+      {
+        params: {
+          token,
+        },
+      }
+    );
+    console.log(response);
+  }
 }
 
 /**
@@ -194,7 +206,17 @@ class User {
       `https://hack-or-snooze-v3.herokuapp.com/users/${username}/favorites/${id}`,
       { params: { token } }
     );
-    console.log(response.data.user.favorites);
+    // instantiate the user from the API information
+    const existingUser = new User(response.data.user);
+
+    // instantiate Story instances for the user's favorites and ownStories
+    existingUser.favorites = response.data.user.favorites.map(
+      (s) => new Story(s)
+    );
+    existingUser.ownStories = response.data.user.stories.map(
+      (s) => new Story(s)
+    );
+    return existingUser;
   }
 }
 
