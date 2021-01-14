@@ -425,6 +425,8 @@ async function ui() {
     });
   }
 
+  hideStory();
+
   /*  INFINITE SCROLL */
   function infiniteScroll() {
     let counter = 25;
@@ -434,15 +436,13 @@ async function ui() {
         $(document).height() - $(window).height() - 10
       ) {
         const moreStories = await StoryList.getInfiniteStories(counter);
-        if (moreStories.stories.length > 0) {
-          counter += 25;
-          moreList = moreStories;
-          for (let story of moreList.stories) {
-            const result = generateStoryHTML(story);
-            $(result).appendTo($('#all-articles-list'));
-          }
-          hideStory();
+        counter += 25;
+        moreList = moreStories;
+        for (let story of moreList.stories) {
+          const result = generateStoryHTML(story);
+          $(result).appendTo($('#all-articles-list'));
         }
+        hideStory();
         btnFav();
         btnUnfav();
         loggedInStories();
