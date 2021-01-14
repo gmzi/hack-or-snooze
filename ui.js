@@ -1,4 +1,4 @@
-$(async function () {
+async function ui() {
   // cache some selectors we'll be using quite a bit
   const $allStoriesList = $('#all-articles-list');
   const $submitForm = $('#submit-form');
@@ -14,10 +14,8 @@ $(async function () {
   const $createStoryForm = $('#create-story-form');
   const $btnFav = $('.btn-fav');
 
-  // global storyList variable
   let storyList = null;
 
-  // global currentUser variable
   let currentUser = null;
 
   await checkIfLoggedIn();
@@ -179,7 +177,6 @@ $(async function () {
     // update the navigation bar
     showNavForLoggedInUser();
     loggedInStories();
-    // updateFavs();
   }
 
   /**
@@ -232,11 +229,8 @@ $(async function () {
     let hostName = getHostName(story.url);
 
     // render story markup
-    // <small class="article-fav" id="btn-fav">&#9734</small>
     const storyMarkup = $(`
       <li id="${story.storyId}">
-      <small class="btn-fav">&#9734</small>
-      <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
@@ -298,26 +292,28 @@ $(async function () {
 
   /* SHOW FAVED STORIES */
   function loggedInStories() {
-    let list = Array.from($('li'));
-    let userFavs = currentUser.favorites;
+    if (currentUser) {
+      let list = Array.from($('li'));
+      let userFavs = currentUser.favorites;
 
-    let filteredNotFavs = [];
+      // let filteredNotFavs = [];
 
-    let filteredFavs = list.filter(function (val) {
-      for (let i = 0; i < userFavs.length; i++) {
-        if (userFavs[i].storyId.includes(val.id)) {
-          val.firstElementChild.classList.add('hidden');
-          val.firstElementChild.nextElementSibling.classList.remove('hidden');
-          return val;
+      let filteredFavs = list.filter(function (val) {
+        for (let i = 0; i < userFavs.length; i++) {
+          if (userFavs[i].storyId.includes(val.id)) {
+            val.firstElementChild.classList.add('hidden');
+            val.firstElementChild.nextElementSibling.classList.remove('hidden');
+            return val;
+          }
         }
-      }
-      filteredNotFavs.push(val);
-    });
+        // filteredNotFavs.push(val);
+      });
 
-    // filteredNotFavs.forEach(function (val) {
-    //   val.firstElementChild.classList.add('hidden');
-    //   val.firstElementChild.nextElementSibling.classList.remove('hidden');
-    // });
+      // filteredNotFavs.forEach(function (val) {
+      //   val.firstElementChild.classList.add('hidden');
+      //   val.firstElementChild.nextElementSibling.classList.remove('hidden');
+      // });
+    }
   }
 
   /* HANDLE CLICK TO FAV STORIES BUTTON */
@@ -409,15 +405,13 @@ $(async function () {
   /* HIDE STORY */
   function hideStory() {
     $('.article-hide').on('click', async function (evt) {
-      console.log('clicked');
+      evt.preventDefault();
       if (currentUser) {
         const id = evt.target.parentElement.id;
         const token = currentUser.loginToken;
         const owner =
           evt.target.parentElement.lastElementChild.previousElementSibling
             .innerText;
-        console.log(owner);
-        console.log(currentUser.username);
         if (owner.includes(currentUser.username)) {
           await StoryList.deleteStory(id, token);
           evt.target.parentElement.remove();
@@ -434,27 +428,30 @@ $(async function () {
   hideStory();
 
   /*  INFINITE SCROLL */
-  // function infiniteScroll() {
-  //   let counter = 25;
-  //   $(window).scroll(async function () {
-  //     if (
-  //       $(window).scrollTop() >=
-  //       $(document).height() - $(window).height() - 10
-  //     ) {
-  //       const moreStories = await StoryList.getInfiniteStories(counter);
-  //       if (moreStories.stories.length > 0) {
-  //         counter += 25;
-  //         moreList = moreStories;
-  //         for (let story of moreList.stories) {
-  //           const result = generateStoryHTML(story);
-  //           $(result).appendTo($('#all-articles-list'));
-  //         }
-  //       }
-  //       btnFav();
-  //       btnUnfav();
-  //     }
-  //     hideStory();
-  //   });
-  // }
-  // infiniteScroll();
-});
+  function infiniteScroll() {
+    let counter = 25;
+    $(window).scroll(async function () {
+      if (
+        $(window).scrollTop() >=
+        $(document).height() - $(window).height() - 10
+      ) {
+        const moreStories = await StoryList.getInfiniteStories(counter);
+        if (moreStories.stories.length > 0) {
+          counter += 25;
+          moreList = moreStories;
+          for (let story of moreList.stories) {
+            const result = generateStoryHTML(story);
+            $(result).appendTo($('#all-articles-list'));
+          }
+          hideStory();
+        }
+        btnFav();
+        btnUnfav();
+        loggedInStories();
+      }
+    });
+  }
+  infiniteScroll();
+}
+
+ui();
