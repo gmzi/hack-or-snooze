@@ -1,12 +1,12 @@
-html {
+/* html {
   font-family: Arimo, sans-serif;
-}
+} */
 
-body {
+/* body {
   margin: 8px 7.5vw;
-}
+} */
 
-h1 {
+/* h1 {
   font-size: 1.1rem;
   margin: 0;
 }
@@ -19,45 +19,184 @@ h4 {
 h5 {
   font-size: 0.9rem;
   font-weight: lighter;
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+body{
+  font-family: Arial, Helvetica, sans-serif
+  color: #828282;
+  background-color: #f6f6ef;
+  margin: 0px 0px;
+}
+
 
 .hidden {
   display: none;
 }
 
-nav {
-  display: flex;
+table {
+  display: table;
+  border-collapse: separate;
+  box-sizing: border-box;
+  text-indent: initial;
+  white-space: normal;
+  line-height: normal;
+  font-weight: normal;
+  font-size: medium;
+  font-style: normal;
+  text-align: start;
+  border-spacing: 2px;
+  font-variant: normal;
   background-color: #ff6600;
-  align-items: center;
-  padding: 5px 20px;
-  border-radius: 3px 3px 0 0;
+  width: 100%;
+  padding: 2px;
+  margin: 0px 0px;
 }
 
-.main-nav-links {
-  margin: 0px 15px;
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
 }
 
-.nav-link {
-  font-size: 0.85rem;
-  margin: 0 3px;
+tr {
+  display: table-row;
+  vertical-align: middle;
 }
 
-.nav-right {
-  margin-left: auto;
+#brand-and-btns {
+  display: table-cell;
+  vertical-align: middle;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* color: #828282; */
 }
 
-.container {
+span.pagetop {
+  display: block;
+  margin: 0.2rem 0.3rem;
+  font-size: 12px;
+  line-height: normal;
+}
+
+b.name {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+
+tr a {
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+
+#logout {
+  text-align: right;
+  padding-right: 4px;
+  font-size: 10pt;
+  display: table-cell; 
+  vertical-align: inherit;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#nav-username{
+  cursor: auto;
+}
+/* ARTICLES TABLE */
+
+.itemlist tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  
+}
+
+#all-articles-list,
+#favs-list {
+  padding: 0.5rem 2rem;
+}
+
+li {
+  vertical-align: inherit;
+  border-color: inherit;
+  margin: 0.5rem 0rem;
+}
+
+li::marker,
+li .btn-fav,
+#btn-fav-remove {
+  color: #828282;
+}
+
+li .title a{
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+  font-size: 10pt;
+  line-height: 14pt;
+  color: rgb(31, 31, 31);
+  border-spacing: 2px;
+}
+
+.article-hostname {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 8pt;
+  color: #828282;
+}
+
+.article-author,
+.article-username,
+.article-hide {
+  color: #828282;
+  font-size: 9pt;
+}
+
+.article-author {
+  margin-left: 1rem;
+}
+
+.article-hide {
+  cursor: pointer;
+}
+
+
+
+
+/* .container {
   display: flex;
   flex-direction: column;
   align-self: center;
   background-color: #f6f6ef;
-}
+} */
+
+/* FORMS */
 
 form {
   display: flex;
   flex-direction: column;
-  margin: 8px 18px 0;
+  margin: 2rem 2rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
+
+form h4,
+#my-favs{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  align-items: center;
+  justify-content: center;
+}
+
+#my-favs{
+  padding: 0.5rem 0.5rem;
+}
+
+.login-input label {
+  margin-right: 2rem;
+  text-align: left;
+}
+
 
 form > * {
   margin: 10px 0;
@@ -69,29 +208,32 @@ form label {
   display: inline-block;
   width: 3.5rem;
   text-align: right;
-  margin-right: 5px;
 }
 
 form input {
   font-size: 0.8rem;
   border: none;
   border-radius: 2px;
-  padding: 8px;
+  padding: 0.5rem;
   width: 300px;
   box-shadow: 0 0 3px 1px lightgray;
 }
-
+form input label {
+  width: 70px;
+}
 form input:focus {
   outline: none;
   box-shadow: 0 0 4px 1px darkgray;
 }
 
-form > button {
+
+form > button,
+#empty-favslist {
   width: 4rem;
-  margin: 5px 0px 15px 65px;
+  margin: 0.5rem 5.6rem;
   border: none;
   border-radius: 4px;
-  padding: 8px;
+  padding: 0.5rem;
   font-size: 0.85rem;
   background-color: lightslategray;
   color: white;
@@ -99,7 +241,8 @@ form > button {
   transition: all 0.15s;
 }
 
-form > button:hover {
+form > button:hover,
+#empty-favslist:hover {
   background-color: dimgray;
 }
 
@@ -108,13 +251,9 @@ form > hr {
   border: 0.5px solid lightgray;
 }
 
-.login-input label {
-  width: 70px;
-}
-
 .account-form button {
   width: 4rem;
-  margin-left: 80px;
+  display: inline-block;
 }
 
 #create-account-form button {
@@ -122,132 +261,26 @@ form > hr {
   width: 8rem;
 }
 
-.articles-list {
-  margin: 20px 5px;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  margin: 0px 2px;
-  cursor: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ARTICLES */
-
-.articles-list > li {
-  color: gray;
-  font-size: 0.8rem;
-  margin: 0.2rem 0;
-}
-
-strong {
-  cursor: pointer;
-}
-
-.article-hostname {
-  /* align-items: flex-end;
-  display: block; */
-  margin-right: auto;
-}
-
-.article-hostname:hover {
-  text-decoration: underline;
-}
-
-.article-author {
-  flex-direction: row;
-  /* margin-top: 5px;
-  margin-left: 25px; */
-}
-
-.article-username {
-  margin-top: 5px;
-  margin-left: 25px;
-}
-
-.article-hide {
-  cursor: pointer;
-}
-
-.star,
-.trash-can,
-.pencil {
-  font-size: 0.75rem;
-  margin: 0 2px;
-  cursor: pointer;
-}
-
-.trash-can:hover {
-  color: crimson;
-}
-
-.pencil:hover {
-  color: darkblue;
-}
-
-.article-link {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.article-link > strong {
-  color: black;
-  font-size: 0.85rem;
-  font-weight: normal;
-  margin: 18px 0;
-}
-
-.article-link:hover {
-  text-decoration: none;
-}
-
-#favorited-articles,
-#filtered-articles,
-#my-articles {
-  list-style: none;
-  padding-left: 20px;
-}
-
-.account-forms-container {
-  padding-left: 20px;
-}
-
-#create-account-form button {
-  margin-bottom: 25px;
-}
-
-#user-profile {
-  padding: 10px 20px 20px;
-  font-size: 0.9rem;
-}
-
-#user-profile > * {
-  margin: 10px 0;
-}
-
-/** responsive queries for tightening things up for mobile. */
-
-@media screen and (max-width: 576px) {
-  body {
-    margin: 0;
+@media (max-width: 750px) {
+  b.name {
+    display: block;
+    font-size: 15px;
+  }
+  #logout {
+    height: inherit !important;
+  }
+  .itemlist{
+    padding-right: 5px;
+  }
+  li .btn-fav{
+    min-width: 18px;
+  }
+  td {
+    height: inherit !important;
+  }
+  li .title {
+    font-size: 11pt;
+    line-height: 14pt;
   }
 }
-
-@media screen and (min-width: 992px) {
-  body {
-    max-width: 900px;
-    margin: 8px auto;
-  }
-}
-
-#msg-done {
-  padding: 2rem;
-}
-
-#nav-username {
-  font-weight: bold;
-}
+/* DESCARTADO HERE */ 

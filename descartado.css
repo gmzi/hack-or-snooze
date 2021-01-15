@@ -1,0 +1,127 @@
+/* DESCARTADO */
+
+.articles-list {
+  margin: 20px 5px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  margin: 0px 2px;
+  cursor: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ARTICLES */
+
+.articles-list > li {
+  color: gray;
+  font-size: 0.8rem;
+  margin: 0.2rem 0;
+}
+
+strong {
+  cursor: pointer;
+}
+
+.article-hostname {
+  /* align-items: flex-end;
+    display: block; */
+  margin-right: auto;
+}
+
+.article-hostname:hover {
+  text-decoration: underline;
+}
+
+.article-author {
+  flex-direction: row;
+  /* margin-top: 5px;
+    margin-left: 25px; */
+}
+
+.article-username {
+  margin-top: 5px;
+  margin-left: 25px;
+}
+
+.article-hide {
+  cursor: pointer;
+}
+
+.star,
+.trash-can,
+.pencil {
+  font-size: 0.75rem;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.trash-can:hover {
+  color: crimson;
+}
+
+.pencil:hover {
+  color: darkblue;
+}
+
+.article-link {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.article-link > strong {
+  color: black;
+  font-size: 0.85rem;
+  font-weight: normal;
+  margin: 18px 0;
+}
+
+.article-link:hover {
+  text-decoration: none;
+}
+
+#favorited-articles,
+#filtered-articles,
+#my-articles {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.account-forms-container {
+  padding-left: 20px;
+}
+
+#create-account-form button {
+  margin-bottom: 25px;
+}
+
+#user-profile {
+  padding: 10px 20px 20px;
+  font-size: 0.9rem;
+}
+
+#user-profile > * {
+  margin: 10px 0;
+}
+
+/** responsive queries for tightening things up for mobile. */
+
+@media screen and (max-width: 576px) {
+  body {
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  body {
+    max-width: 900px;
+    margin: 8px auto;
+  }
+}
+
+#msg-done {
+  padding: 2rem;
+}

@@ -12,23 +12,34 @@
 </head>
 
 <body>
-  <nav>
-    <b><a class="nav-link navbar-brand" href="#" id="nav-all">Hack or Snooze</a></b>
-    <a class="nav-link nav-right" href="#" id="nav-login">login/create user</a>
-    <span class="nav-link nav-right hidden" id="nav-welcome">
-      <a href="#" id="nav-user-profile"></a>
-    </span>
-      <a class="hidden" id="nav-create-story" href="#">
-        <small>| Create new story | </small>
-      </a>
-      <a class="hidden" id="nav-favs" href="#">
-        <small>My favorites | </small>
-      </a>
-      <a class="hidden" id="nav-logout" href="#">
-        <small><span id="nav-username"></span> | (logout)</small>
-      </a>
-    
-  </nav>
+  <table>
+    <tbody>
+      <tr>
+        <td id="brand-and-btns">
+          <span class="pagetop">
+            <b class="name"><a class="nav-link navbar-brand" href="#" id="nav-all">Hack or Snooze</a></b>
+            <span class="nav-link nav-right hidden" id="nav-welcome">
+              <a href="#" id="nav-user-profile"></a>
+          </span>
+          <span>
+            <a class="hidden" id="nav-create-story" href="#">
+              | Create new story |
+            </a>
+            <a class="hidden" id="nav-favs" href="#">
+              My favorites
+            </a>
+          </span>
+        </td>
+        <td id="logout"> 
+          <span class="pagetop"> 
+            <a href="" id="nav-username"></a> 
+            <a class="hidden" id="nav-logout" href="#">(logout)</a>
+            <a class="nav-link nav-right" href="#" id="nav-login">login/create user</a>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <section class="articles-container container">
     <form action="" class="hidden" id="submit-form">
       <div>
@@ -46,12 +57,19 @@
       <button type="submit">submit</button>
       <hr>
     </form>
-    <article>
-      <!-- articles list -->
-      <ol id="all-articles-list" class="articles-list">
-        <h3>Loading...</h3>
-      </ol>
-    </article>
+
+    <!-- articles list -->
+    <table class="itemlist">
+      <tbody>
+        <tr>
+          <ol id="all-articles-list" class="articles-list">
+            <h3>Loading...</h3>
+          </ol>
+        </tr>
+      </tbody>
+    </table>
+
+
     <article class="post">
       <ul id="favorited-articles" class="hidden articles-list">
       </ul>
@@ -122,28 +140,19 @@
         <label for="create-story-url">url</label>
         <input id="create-story-url" type="url">
       </div>
-      <button type="submit">Submit story</button>
+        <button type="submit">Submit story</button>
     </form>
     <h4 class="hidden" id="msg-done">Done!</h4>
   </section>
 
+  <!-- favorites -->
   <section id="favs-section" class="hidden">
     <h4 id="my-favs">My favs</h4>
     <h6 id="no-favs" class="hidden">No favs at all</h6>
     <ol id="favs-list">
-
     </ol>
     <button id="empty-favslist">remove all</button>
   </section>
-
-  <!-- <section id="user-profile" class="container hidden">
-    <h4>User Profile Info</h4>
-    <section>
-      <div id="profile-name">Name:</div>
-      <div id="profile-username">Username:</div>
-      <div id="profile-account-date">Account Created:</div>
-    </section>
-  </section> -->
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
