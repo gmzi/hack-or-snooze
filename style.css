@@ -160,7 +160,6 @@ strong {
 }
 
 .article-author {
-  display: ;
   flex-direction: row;
   /* margin-top: 5px;
   margin-left: 25px; */
@@ -169,6 +168,10 @@ strong {
 .article-username {
   margin-top: 5px;
   margin-left: 25px;
+}
+
+.article-hide {
+  cursor: pointer;
 }
 
 .star,

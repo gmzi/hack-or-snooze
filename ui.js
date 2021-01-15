@@ -107,9 +107,9 @@ async function ui() {
   });
 
   function showLoginForm() {
-    $loginForm.slideToggle();
-    $createAccountForm.slideToggle();
-    $allStoriesList.toggle();
+    $loginForm.show();
+    $createAccountForm.show();
+    $allStoriesList.hide();
   }
   /**
    * Event handler for Navigation to Homepage
@@ -405,7 +405,6 @@ async function ui() {
   /* HIDE STORY */
   function hideStory() {
     $('.article-hide').on('click', async function (evt) {
-      evt.preventDefault();
       if (currentUser) {
         const id = evt.target.parentElement.id;
         const token = currentUser.loginToken;
@@ -415,12 +414,14 @@ async function ui() {
         if (owner.includes(currentUser.username)) {
           await StoryList.deleteStory(id, token);
           evt.target.parentElement.remove();
+          return;
         } else {
           return alert('must own the story to delete it');
         }
       } else {
         alert('need to be logged in and own the story to hide it');
         showLoginForm();
+        return;
       }
     });
   }
@@ -428,17 +429,51 @@ async function ui() {
   hideStory();
 
   /*  INFINITE SCROLL */
-  let runner = 0;
-  function infiniteScroll() {
-    runner += 1;
-    console.log(`runner ${runner}`);
+  // let runner = 0;
+  // function infiniteScroll() {
+  //   runner += 1;
+  //   console.log(`runner ${runner}`);
 
+  //   let counter = 25;
+  //   $(window).scroll(async function () {
+  //     if (
+  //       $(window).scrollTop() >=
+  //       $(document).height() - $(window).height() - 10
+  //     ) {
+  //
+  //       const moreStories = await StoryList.getInfiniteStories(counter);
+  //       counter += 25;
+  //       moreList = moreStories;
+  //       for (let story of moreList.stories) {
+  //         const result = generateStoryHTML(story);
+  //         $(result).appendTo($('#all-articles-list'));
+  //       }
+  //       hideStory();
+  //       btnFav();
+  //       btnUnfav();
+  //       loggedInStories();
+  //       // return;
+  //     }
+  //   });
+  // }
+  // infiniteScroll();
+
+  /*  PLAN B */
+
+  function infiniteScroll() {
+    let runner = 0;
     let counter = 25;
-    $(window).scroll(async function () {
-      if (
-        $(window).scrollTop() >=
-        $(document).height() - $(window).height() - 10
-      ) {
+    let executionCounter = 0;
+    document.addEventListener('scroll', async function () {
+      const {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+      } = document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        runner += 1;
+        // console.log(runner);
+        console.log(runner);
         const moreStories = await StoryList.getInfiniteStories(counter);
         counter += 25;
         moreList = moreStories;
@@ -446,10 +481,21 @@ async function ui() {
           const result = generateStoryHTML(story);
           $(result).appendTo($('#all-articles-list'));
         }
-        hideStory();
-        btnFav();
-        btnUnfav();
-        loggedInStories();
+        // console.log(executionCounter);
+        if (executionCounter === 0) {
+          btnFav();
+          btnUnfav();
+          hideStory();
+          loggedInStories();
+          executionCounter += 1;
+        }
+        return;
+      }
+      if (scrollTop - clientHeight >= scrollHeight + 5) {
+        runner--;
+        console.log(runner);
+        return;
+      } else {
         return;
       }
     });

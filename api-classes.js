@@ -43,6 +43,7 @@ class StoryList {
 
     // build an instance of our own class using the new array of stories
     const storyList = new StoryList(stories);
+    console.log(response);
     return storyList;
   }
 
@@ -77,7 +78,7 @@ class StoryList {
         },
       }
     );
-    // console.log(response.status);
+    console.log(response);
   }
 }
 
