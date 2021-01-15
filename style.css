@@ -27,13 +27,10 @@ h5 {
   box-sizing: border-box;
 }
 
-body{
-  font-family: Arial, Helvetica, sans-serif
-  color: #828282;
+body {
   background-color: #f6f6ef;
   margin: 0px 0px;
 }
-
 
 .hidden {
   display: none;
@@ -87,7 +84,6 @@ b.name {
   font-weight: bold;
 }
 
-
 tr a {
   cursor: pointer;
   color: black;
@@ -98,12 +94,12 @@ tr a {
   text-align: right;
   padding-right: 4px;
   font-size: 10pt;
-  display: table-cell; 
+  display: table-cell;
   vertical-align: inherit;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-#nav-username{
+#nav-username {
   cursor: auto;
 }
 /* ARTICLES TABLE */
@@ -111,7 +107,6 @@ tr a {
 .itemlist tbody {
   display: table-row-group;
   vertical-align: middle;
-  
 }
 
 #all-articles-list,
@@ -135,7 +130,7 @@ li .btn-fav {
   cursor: pointer;
 }
 
-li .title a{
+li .title a {
   text-decoration: none;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: lighter;
@@ -166,7 +161,6 @@ li .title a{
   cursor: pointer;
 }
 
-
 /* FORMS */
 
 form {
@@ -179,7 +173,7 @@ form {
 form h4,
 #my-favs,
 #no-favs,
-#msg-done{
+#msg-done {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   align-items: center;
   justify-content: center;
@@ -187,7 +181,7 @@ form h4,
 
 #my-favs,
 #no-favs,
-#msg-done{
+#msg-done {
   padding: 0.5rem 0.5rem;
 }
 
@@ -199,7 +193,6 @@ form h4,
   margin-right: 2rem;
   text-align: left;
 }
-
 
 form > * {
   margin: 10px 0;
@@ -228,7 +221,6 @@ form input:focus {
   outline: none;
   box-shadow: 0 0 4px 1px darkgray;
 }
-
 
 form > button,
 #empty-favslist {
@@ -272,10 +264,10 @@ form > hr {
   #logout {
     height: inherit !important;
   }
-  .itemlist{
+  .itemlist {
     padding-right: 5px;
   }
-  li .btn-fav{
+  li .btn-fav {
     min-width: 18px;
   }
   td {
@@ -286,4 +278,4 @@ form > hr {
     line-height: 14pt;
   }
 }
-/* DESCARTADO HERE */ 
+/* DESCARTADO HERE */
