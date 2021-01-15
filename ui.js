@@ -116,14 +116,6 @@ async function ui() {
    */
 
   $('body').on('click', '#nav-all', async function () {
-    // await checkIfLoggedIn();
-    // $('#msg-done').addClass('hidden');
-    // hideElements();
-    // await generateStories();
-    // $allStoriesList.show();
-    // if (currentUser) {
-    //   loggedInStories();
-    // }
     location.reload();
   });
 
@@ -296,8 +288,6 @@ async function ui() {
       let list = Array.from($('li'));
       let userFavs = currentUser.favorites;
 
-      // let filteredNotFavs = [];
-
       let filteredFavs = list.filter(function (val) {
         for (let i = 0; i < userFavs.length; i++) {
           if (userFavs[i].storyId.includes(val.id)) {
@@ -306,13 +296,7 @@ async function ui() {
             return val;
           }
         }
-        // filteredNotFavs.push(val);
       });
-
-      // filteredNotFavs.forEach(function (val) {
-      //   val.firstElementChild.classList.add('hidden');
-      //   val.firstElementChild.nextElementSibling.classList.remove('hidden');
-      // });
     }
   }
 
@@ -428,37 +412,7 @@ async function ui() {
 
   hideStory();
 
-  /*  INFINITE SCROLL */
-  // let runner = 0;
-  // function infiniteScroll() {
-  //   runner += 1;
-  //   console.log(`runner ${runner}`);
-
-  //   let counter = 25;
-  //   $(window).scroll(async function () {
-  //     if (
-  //       $(window).scrollTop() >=
-  //       $(document).height() - $(window).height() - 10
-  //     ) {
-  //
-  //       const moreStories = await StoryList.getInfiniteStories(counter);
-  //       counter += 25;
-  //       moreList = moreStories;
-  //       for (let story of moreList.stories) {
-  //         const result = generateStoryHTML(story);
-  //         $(result).appendTo($('#all-articles-list'));
-  //       }
-  //       hideStory();
-  //       btnFav();
-  //       btnUnfav();
-  //       loggedInStories();
-  //       // return;
-  //     }
-  //   });
-  // }
-  // infiniteScroll();
-
-  /*  PLAN B */
+  /* INFINITE SCROLL */
 
   function infiniteScroll() {
     let runner = 0;
@@ -472,7 +426,7 @@ async function ui() {
       } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 5) {
         runner += 1;
-        // console.log(runner);
+        console.log(runner);
         console.log(runner);
         const moreStories = await StoryList.getInfiniteStories(counter);
         counter += 25;
