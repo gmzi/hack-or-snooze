@@ -131,6 +131,10 @@ li .btn-fav,
   color: #828282;
 }
 
+li .btn-fav {
+  cursor: pointer;
+}
+
 li .title a{
   text-decoration: none;
   font-family: Arial, Helvetica, sans-serif;
@@ -163,15 +167,6 @@ li .title a{
 }
 
 
-
-
-/* .container {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  background-color: #f6f6ef;
-} */
-
 /* FORMS */
 
 form {
@@ -182,14 +177,22 @@ form {
 }
 
 form h4,
-#my-favs{
+#my-favs,
+#no-favs,
+#msg-done{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   align-items: center;
   justify-content: center;
 }
 
-#my-favs{
+#my-favs,
+#no-favs,
+#msg-done{
   padding: 0.5rem 0.5rem;
+}
+
+#no-favs {
+  font-style: italic;
 }
 
 .login-input label {

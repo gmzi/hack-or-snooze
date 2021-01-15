@@ -223,7 +223,7 @@ async function ui() {
     // render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
-        <small class="btn-fav">&#9734</small>
+        <small>&#9734</small>
         <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <small class="title">
           <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
@@ -231,8 +231,7 @@ async function ui() {
         </small>
         <br>
         <small class="article-author">by ${story.author} | </small>
-        <small class="article-username">posted by ${story.username} | </small>
-        <small class="article-hide">hide</small>
+        <small class="article-username">posted by ${story.username}</small>
       </li>
     `);
 
