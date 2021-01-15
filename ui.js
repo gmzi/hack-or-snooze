@@ -428,7 +428,11 @@ async function ui() {
   hideStory();
 
   /*  INFINITE SCROLL */
+  let runner = 0;
   function infiniteScroll() {
+    runner += 1;
+    console.log(`runner ${runner}`);
+
     let counter = 25;
     $(window).scroll(async function () {
       if (
@@ -446,6 +450,7 @@ async function ui() {
         btnFav();
         btnUnfav();
         loggedInStories();
+        return;
       }
     });
   }
