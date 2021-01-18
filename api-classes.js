@@ -24,23 +24,23 @@ class StoryList {
   // class directly. Why doesn't it make sense for getStories to be an instance method?
 
   // REFACTORED SO AS TO LOAD MORE THAN 25 STORIES:
+  // TODO: make a while loop so it will load all the stories available in server.
   static async getStories() {
     // store all stories:
     const responseBundle = [];
-    // set the skip value for the server:
-    let skip = 25;
+
     // first request:
     const batch1 = await axios.get(`${BASE_URL}/stories`);
-    // request for more stories:
+    // check if there are more stories to load:
     if (batch1.data.stories.length >= 25) {
-      console.log(skip);
+      let skip = batch1.data.stories.length;
       const batchMore = await axios.get(`${BASE_URL}/stories?skip=${skip}`);
       const moreStories = batchMore.data.stories;
       for (let story of moreStories) {
         batch1.data.stories.push(story);
       }
       responseBundle.push(batch1);
-      skip += 25;
+      skip += batchMore.data.stories.length;
     } else {
       responseBundle.push(batch1);
     }
@@ -51,7 +51,6 @@ class StoryList {
       const storyList = new StoryList(stories);
       result = storyList;
     });
-    console.log(result);
     return result;
   }
 

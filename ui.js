@@ -416,48 +416,49 @@ async function ui() {
   hideStory();
 
   /* INFINITE SCROLL */
+  /* Tried to implement it but didn't work properly */
 
-  function infiniteScroll() {
-    let runner = 0;
-    let counter = 25;
-    let executionCounter = 0;
-    document.addEventListener('scroll', async function () {
-      const {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      } = document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
-        runner += 1;
-        console.log(runner);
-        console.log(runner);
-        const moreStories = await StoryList.getInfiniteStories(counter);
-        counter += 25;
-        moreList = moreStories;
-        for (let story of moreList.stories) {
-          const result = generateStoryHTML(story);
-          $(result).appendTo($('#all-articles-list'));
-        }
-        // console.log(executionCounter);
-        if (executionCounter === 0) {
-          btnFav();
-          btnUnfav();
-          hideStory();
-          loggedInStories();
-          executionCounter += 1;
-        }
-        return;
-      }
-      if (scrollTop - clientHeight >= scrollHeight + 5) {
-        runner--;
-        console.log(runner);
-        return;
-      } else {
-        return;
-      }
-    });
-  }
-  infiniteScroll();
+  // function infiniteScroll() {
+  //   let runner = 0;
+  //   let counter = 25;
+  //   let executionCounter = 0;
+  //   document.addEventListener('scroll', async function () {
+  //     const {
+  //       scrollTop,
+  //       scrollHeight,
+  //       clientHeight,
+  //     } = document.documentElement;
+  //     if (scrollTop + clientHeight >= scrollHeight - 5) {
+  //       runner += 1;
+  //       console.log(runner);
+  //       console.log(runner);
+  //       const moreStories = await StoryList.getInfiniteStories(counter);
+  //       counter += 25;
+  //       moreList = moreStories;
+  //       for (let story of moreList.stories) {
+  //         const result = generateStoryHTML(story);
+  //         $(result).appendTo($('#all-articles-list'));
+  //       }
+  //       // console.log(executionCounter);
+  //       if (executionCounter === 0) {
+  //         btnFav();
+  //         btnUnfav();
+  //         hideStory();
+  //         loggedInStories();
+  //         executionCounter += 1;
+  //       }
+  //       return;
+  //     }
+  //     if (scrollTop - clientHeight >= scrollHeight + 5) {
+  //       runner--;
+  //       console.log(runner);
+  //       return;
+  //     } else {
+  //       return;
+  //     }
+  //   });
+  // }
+  // infiniteScroll();
 }
 
 ui();
