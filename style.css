@@ -28,8 +28,8 @@ h5 {
 }
 
 body {
-  background-color: #f6f6ef;
   margin: 0px 0px;
+  background-color: #f6f6ef;
 }
 
 .hidden {
@@ -47,12 +47,11 @@ table {
   font-size: medium;
   font-style: normal;
   text-align: start;
-  border-spacing: 2px;
+  border-spacing: 0px;
   font-variant: normal;
-  background-color: #ff6600;
   width: 100%;
-  padding: 2px;
-  margin: 0px 0px;
+  margin: 2px 2px;
+  padding: 1px;
 }
 
 tbody {
@@ -60,9 +59,10 @@ tbody {
   vertical-align: middle;
 }
 
-tr {
+.top {
   display: table-row;
   vertical-align: middle;
+  background-color: #ff6600;
 }
 
 #brand-and-btns {
@@ -112,6 +112,7 @@ tr a {
 #all-articles-list,
 #favs-list {
   padding: 0.5rem 2rem;
+  background-color: #f6f6ef;
 }
 
 li {
@@ -254,6 +255,31 @@ form > hr {
 #create-account-form button {
   padding: 10px;
   width: 8rem;
+}
+
+/* FOOTER */
+
+.bottom {
+  background-color: #ff6600;
+  margin: 0;
+}
+.bott-cont {
+  margin: 0;
+  padding: 0;
+}
+
+.bott-cont form {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.bott-cont form label,
+.bott-cont form input {
+  margin: 0rem 0.2rem;
+  padding: 0.3rem;
 }
 
 @media (max-width: 750px) {
