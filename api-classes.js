@@ -27,12 +27,12 @@ class StoryList {
   static async getStories() {
     // store all stories:
     const responseBundle = [];
-    // set the skip value for the server:
-    let skip = 25;
+
     // first request:
     const batch1 = await axios.get(`${BASE_URL}/stories`);
     // request for more stories:
     if (batch1.data.stories.length >= 25) {
+      let skip = batch1.data.stories.length;
       console.log(skip);
       const batchMore = await axios.get(`${BASE_URL}/stories?skip=${skip}`);
       const moreStories = batchMore.data.stories;
@@ -40,7 +40,7 @@ class StoryList {
         batch1.data.stories.push(story);
       }
       responseBundle.push(batch1);
-      skip += 25;
+      skip += batchMore.data.stories.length;
     } else {
       responseBundle.push(batch1);
     }
