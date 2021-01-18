@@ -66,16 +66,22 @@
             <h3>Loading...</h3>
           </ol>
         </tr>
-        <tr class="hidden">
-          <hr class="hidden" color="#ff6600" margin="0">
-            <td class="bott-cont">
-              <div class="bott-cont">
-                <form method="get" action="#">
-                  <label>Search:</label>
-                  <input type="text">
-                </form>
-              </div>
-            </td>
+        <!-- Search bar -->
+        <tr id="searchbar" class="">
+          <td class="bott-cont">
+            <hr color="#ff6600" margin="0">
+              <form id="searchform" method="get" action="">
+                <label>Search:</label>
+                <input type="text">
+                <input type="submit">
+              </form>
+          </td>
+        </tr>
+        <tr>
+          <td class="search-results">
+            <ul id="search-results-list">
+            </ul>
+          </td>
         </tr>
       </tbody>
     </table>

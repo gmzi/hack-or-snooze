@@ -110,7 +110,8 @@ tr a {
 }
 
 #all-articles-list,
-#favs-list {
+#favs-list,
+#search-results-list {
   padding: 0.5rem 2rem;
   background-color: #f6f6ef;
 }
@@ -123,7 +124,8 @@ li {
 
 li::marker,
 li .btn-fav,
-#btn-fav-remove {
+#btn-fav-remove,
+#star {
   color: #828282;
 }
 
@@ -174,6 +176,7 @@ form {
 form h4,
 #my-favs,
 #no-favs,
+#not-found,
 #msg-done {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   align-items: center;
@@ -181,13 +184,20 @@ form h4,
 }
 
 #my-favs,
-#no-favs,
+#not-found,
 #msg-done {
   padding: 0.5rem 0.5rem;
 }
 
-#no-favs {
+#no-favs,
+#not-found {
   font-style: italic;
+}
+
+#not-found {
+  margin: 0px 0px;
+  padding: 0rem 0rem;
+  text-align: center;
 }
 
 .login-input label {
@@ -280,6 +290,10 @@ form > hr {
 .bott-cont form input {
   margin: 0rem 0.2rem;
   padding: 0.3rem;
+}
+
+#search-results-list {
+  text-emphasis: none;
 }
 
 @media (max-width: 750px) {

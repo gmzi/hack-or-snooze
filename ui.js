@@ -110,6 +110,7 @@ async function ui() {
     $loginForm.show();
     $createAccountForm.show();
     $allStoriesList.hide();
+    $('#searchbar').hide();
   }
   /**
    * Event handler for Navigation to Homepage
@@ -181,6 +182,7 @@ async function ui() {
     const storyListInstance = await StoryList.getStories();
     // update our global variable
     storyList = storyListInstance;
+
     // empty out that part of the page
     $allStoriesList.empty();
 
@@ -195,11 +197,11 @@ async function ui() {
    * A function to render HTML for an individual Story instance
    */
 
-  function generateStoryHTML(story) {
-    let hostName = getHostName(story.url);
-
-    // render story markup
-    const storyMarkup = $(`
+  function generateStoryHTML(story, section) {
+    if (section === undefined) {
+      let hostName = getHostName(story.url);
+      // render story markup
+      const storyMarkup = $(`
       <li id="${story.storyId}">
         <small class="btn-fav">&#9734</small>
         <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
@@ -214,16 +216,15 @@ async function ui() {
       </li>
     `);
 
-    return storyMarkup;
-  }
+      return storyMarkup;
+    }
+    if (section === 'favs') {
+      let hostName = getHostName(story.url);
 
-  function generateStoryHTMLforFavs(story) {
-    let hostName = getHostName(story.url);
-
-    // render story markup
-    const storyMarkup = $(`
+      // render story markup
+      const storyMarkup = $(`
       <li id="${story.storyId}">
-        <small>&#9734</small>
+        <small id="star">&#9733</small>
         <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <small class="title">
           <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
@@ -235,8 +236,51 @@ async function ui() {
       </li>
     `);
 
-    return storyMarkup;
+      return storyMarkup;
+    }
+
+    if (section === 'search-results') {
+      let hostName = getHostName(story.url);
+
+      // render story markup
+      const storyMarkup = $(`
+      <li id="${story.storyId}">
+        <small id="star">&#9733</small>
+        <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
+        <small class="title">
+          <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
+          <small class="article-hostname ${hostName}">(${hostName})</small>
+        </small>
+        <br>
+        <small class="article-author">by ${story.author} | </small>
+        <small class="article-username">posted by ${story.username}</small>
+      </li>
+    `);
+
+      return storyMarkup;
+    }
   }
+
+  // function generateStoryHTMLforFavs(story) {
+  //   let hostName = getHostName(story.url);
+
+  //   // render story markup
+  //   const storyMarkup = $(`
+  //     <li id="${story.storyId}">
+  //       <small id="star">&#9733</small>
+  //       <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
+  //       <small class="title">
+  //         <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
+  //         <small class="article-hostname ${hostName}">(${hostName})</small>
+  //       </small>
+  //       <br>
+  //       <small class="article-author">by ${story.author} | </small>
+  //       <small class="article-username">posted by ${story.username}</small>
+  //     </li>
+  //   `);
+
+  //   return storyMarkup;
+  // }
 
   /* hide all elements in elementsArr */
 
@@ -351,6 +395,7 @@ async function ui() {
     $favsList.empty();
 
     $('#all-articles-list').hide();
+    $('#searchbar').hide();
     $('#create-story').hide();
     $('#favs-section').show();
 
@@ -361,7 +406,7 @@ async function ui() {
     const userFavs = currentUser.favorites;
     const $favsList = $('#favs-list');
     for (let i = 0; i < userFavs.length; i++) {
-      const result = generateStoryHTMLforFavs(userFavs[i]);
+      const result = generateStoryHTML(userFavs[i], 'favs');
       $favsList.append(result.get()[0]);
     }
     if ($('#favs-list').children().length === 0) {
@@ -416,7 +461,7 @@ async function ui() {
   hideStory();
 
   /* INFINITE SCROLL */
-  /* Tried to implement it but didn't work properly */
+  /* Tried to implement it but didn't work properly, checkout branch "infiniteScroll" for this try */
 
   // function infiniteScroll() {
   //   let runner = 0;
@@ -459,6 +504,37 @@ async function ui() {
   //   });
   // }
   // infiniteScroll();
+
+  $('#searchform').on('submit', function (e) {
+    e.preventDefault();
+    const $list = $('#search-results-list');
+    $list.empty();
+
+    let form = document.querySelector('#searchform');
+    let input = document.querySelector('#searchform input');
+    if (input.value === '') {
+      alert('please type search term');
+    } else {
+      let value = input.value.toLowerCase().trim();
+      search(value);
+      input.value = '';
+    }
+  });
+
+  function search(value) {
+    $list = $('#search-results-list');
+    for (let i = 0; i < $allStoriesList[0].childNodes.length; i++) {
+      if ($allStoriesList[0].childNodes[i].innerText.includes(value)) {
+        $($allStoriesList[0].childNodes[i]).appendTo($('#search-results-list'));
+      }
+    }
+    console.log($list[0].children.length);
+    if ($list[0].children.length === 0) {
+      $('<p id="not-found">...nothing found...</p>').appendTo(
+        $('#search-results-list')
+      );
+    }
+  }
 }
 
 ui();
