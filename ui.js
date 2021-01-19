@@ -507,10 +507,9 @@ async function ui() {
 
   $('#searchform').on('submit', function (e) {
     e.preventDefault();
-    const $list = $('#search-results-list');
-    $list.empty();
-
-    let form = document.querySelector('#searchform');
+    // const $list = $('#search-results-list');
+    // $list.empty();
+    // let form = document.querySelector('#searchform');
     let input = document.querySelector('#searchform input');
     if (input.value === '') {
       alert('please type search term');
@@ -521,19 +520,39 @@ async function ui() {
     }
   });
 
+  // function search(value) {
+  //   $list = $('#search-results-list');
+  //   for (let i = 0; i < $allStoriesList[0].childNodes.length; i++) {
+  //     if ($allStoriesList[0].childNodes[i].innerText.includes(value)) {
+  //       $($allStoriesList[0].childNodes[i]).appendTo($('#search-results-list'));
+  //     }
+  //   }
+  //   console.log($list[0].children.length);
+  //   if ($list[0].children.length === 0) {
+  //     $('<p id="not-found">...nothing found...</p>').appendTo(
+  //       $('#search-results-list')
+  //     );
+  //   }
+  // }
+
   function search(value) {
-    $list = $('#search-results-list');
-    for (let i = 0; i < $allStoriesList[0].childNodes.length; i++) {
-      if ($allStoriesList[0].childNodes[i].innerText.includes(value)) {
-        $($allStoriesList[0].childNodes[i]).appendTo($('#search-results-list'));
-      }
+    const items = Array.from(
+      document.querySelectorAll('#all-articles-list li')
+    );
+    console.dir(items);
+    const itemsCopy = [];
+    for (let i = 0; i < items.length; i++) {
+      let newItem = items[i];
+      itemsCopy.push(newItem);
     }
-    console.log($list[0].children.length);
-    if ($list[0].children.length === 0) {
-      $('<p id="not-found">...nothing found...</p>').appendTo(
-        $('#search-results-list')
-      );
-    }
+    console.log(itemsCopy);
+    const list = document.querySelector('#search-results-list');
+    const found = itemsCopy.filter(function (e) {
+      return e.innerHTML.toLowerCase().includes(value);
+    });
+    found.forEach(function (val) {
+      list.append(val);
+    });
   }
 }
 
