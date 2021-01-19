@@ -20,33 +20,6 @@ async function ui() {
 
   await checkIfLoggedIn();
 
-  /***
-   * EVENT LISTENER FOR CREATESTORY FORM
-   */
-
-  $createStoryForm.on('submit', function (evt) {
-    evt.preventDefault();
-    // capture inputs:
-    let title = $('#create-story-title').val();
-    let author = $('#create-story-author').val();
-    let url = $('#create-story-url').val();
-
-    // check if inputs are empty
-    if (title === '' || author === '' || url === '') {
-      alert('all fields required');
-    } else {
-      StoryList.addStory(currentUser, title, author, url);
-
-      $createStoryForm.trigger('reset');
-      $createStoryForm.hide();
-
-      // update stories list:
-      generateStories();
-
-      $('#msg-done').removeClass('hidden');
-    }
-  });
-
   /**
    * Event listener for logging in.
    *  If successfully we will setup the user instance
@@ -198,7 +171,8 @@ async function ui() {
   }
 
   /**
-   * A function to render HTML for an individual Story instance
+   * A function to render HTML for an individual Story instance,
+   * WORKS BOTH FOR MAIN LIST AND FOR FAVORITES SECTION.
    */
 
   function generateStoryHTML(story, section) {
@@ -210,12 +184,12 @@ async function ui() {
         <small class="btn-fav">&#9734</small>
         <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
         <small class="title">
-          <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
-          <small class="article-hostname ${hostName}">(${hostName})</small>
+          <a class="article-link" href="${story.url}" target="a_blank"><strong class="searchable">${story.title}</strong></a>
+          <small class="article-hostname ${hostName} searchable">(${hostName})</small>
         </small>
         <br>
-        <small class="article-author">by ${story.author} | </small>
-        <small class="article-username">posted by ${story.username} | </small>
+        <small class="article-author">by <span class="searchable">${story.author}</span> | </small>
+        <small class="article-username">posted by <span class="searchable">${story.username}</span> | </small>
         <small class="article-hide">hide</small>
       </li>
     `);
@@ -242,63 +216,6 @@ async function ui() {
 
       return storyMarkup;
     }
-
-    if (section === 'search-results') {
-      let hostName = getHostName(story.url);
-
-      // render story markup
-      const storyMarkup = $(`
-      <li id="${story.storyId}">
-        <small id="star">&#9733</small>
-        <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
-        <small class="title">
-          <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
-          <small class="article-hostname ${hostName}">(${hostName})</small>
-        </small>
-        <br>
-        <small class="article-author">by ${story.author} | </small>
-        <small class="article-username">posted by ${story.username}</small>
-      </li>
-    `);
-
-      return storyMarkup;
-    }
-  }
-
-  // function generateStoryHTMLforFavs(story) {
-  //   let hostName = getHostName(story.url);
-
-  //   // render story markup
-  //   const storyMarkup = $(`
-  //     <li id="${story.storyId}">
-  //       <small id="star">&#9733</small>
-  //       <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
-  //       <small class="title">
-  //         <a class="article-link" href="${story.url}" target="a_blank"><strong>${story.title}</strong></a>
-  //         <small class="article-hostname ${hostName}">(${hostName})</small>
-  //       </small>
-  //       <br>
-  //       <small class="article-author">by ${story.author} | </small>
-  //       <small class="article-username">posted by ${story.username}</small>
-  //     </li>
-  //   `);
-
-  //   return storyMarkup;
-  // }
-
-  /* hide all elements in elementsArr */
-
-  function hideElements() {
-    const elementsArr = [
-      $submitForm,
-      $allStoriesList,
-      $filteredArticles,
-      $ownStories,
-      $loginForm,
-      $createAccountForm,
-      $createStoryForm,
-    ];
-    elementsArr.forEach(($elem) => $elem.hide());
   }
 
   function showNavForLoggedInUser() {
@@ -439,6 +356,31 @@ async function ui() {
     }
   }
 
+  /* CREATE STORY */
+
+  $createStoryForm.on('submit', function (evt) {
+    evt.preventDefault();
+    // capture inputs:
+    let title = $('#create-story-title').val();
+    let author = $('#create-story-author').val();
+    let url = $('#create-story-url').val();
+
+    // check if inputs are empty
+    if (title === '' || author === '' || url === '') {
+      alert('all fields required');
+    } else {
+      StoryList.addStory(currentUser, title, author, url);
+
+      $createStoryForm.trigger('reset');
+      $createStoryForm.hide();
+
+      // update stories list:
+      generateStories();
+
+      $('#msg-done').removeClass('hidden');
+    }
+  });
+
   /* HIDE STORY */
   function hideStory() {
     $('.article-hide').on('click', async function (evt) {
@@ -465,80 +407,23 @@ async function ui() {
 
   hideStory();
 
-  /* INFINITE SCROLL */
-  /* Tried to implement it but didn't work properly, checkout branch "infiniteScroll" for this try */
-
-  // function infiniteScroll() {
-  //   let runner = 0;
-  //   let counter = 25;
-  //   let executionCounter = 0;
-  //   document.addEventListener('scroll', async function () {
-  //     const {
-  //       scrollTop,
-  //       scrollHeight,
-  //       clientHeight,
-  //     } = document.documentElement;
-  //     if (scrollTop + clientHeight >= scrollHeight - 5) {
-  //       runner += 1;
-  //       console.log(runner);
-  //       console.log(runner);
-  //       const moreStories = await StoryList.getInfiniteStories(counter);
-  //       counter += 25;
-  //       moreList = moreStories;
-  //       for (let story of moreList.stories) {
-  //         const result = generateStoryHTML(story);
-  //         $(result).appendTo($('#all-articles-list'));
-  //       }
-  //       // console.log(executionCounter);
-  //       if (executionCounter === 0) {
-  //         btnFav();
-  //         btnUnfav();
-  //         hideStory();
-  //         loggedInStories();
-  //         executionCounter += 1;
-  //       }
-  //       return;
-  //     }
-  //     if (scrollTop - clientHeight >= scrollHeight + 5) {
-  //       runner--;
-  //       console.log(runner);
-  //       return;
-  //     } else {
-  //       return;
-  //     }
-  //   });
-  // }
-  // infiniteScroll();
+  /* SEARCH FORM SUBMIT */
 
   $('#searchform').on('submit', function (e) {
     e.preventDefault();
     const $list = $('#search-results-list');
     $list.empty();
-    let form = document.querySelector('#searchform');
     let input = document.querySelector('#searchform input');
     if (input.value === '') {
       alert('please type search term');
     } else {
-      let value = input.value.toLowerCase().trim();
+      let value = input.value;
       search(value);
       input.value = '';
     }
   });
 
-  // function search(value) {
-  //   $list = $('#search-results-list');
-  //   for (let i = 0; i < $allStoriesList[0].childNodes.length; i++) {
-  //     if ($allStoriesList[0].childNodes[i].innerText.includes(value)) {
-  //       $($allStoriesList[0].childNodes[i]).appendTo($('#search-results-list'));
-  //     }
-  //   }
-  //   console.log($list[0].children.length);
-  //   if ($list[0].children.length === 0) {
-  //     $('<p id="not-found">...nothing found...</p>').appendTo(
-  //       $('#search-results-list')
-  //     );
-  //   }
-  // }
+  /* SEARCH FORM LOGIC */
 
   function search(value) {
     const items = Array.from(
@@ -546,7 +431,17 @@ async function ui() {
     );
     const list = document.querySelector('#search-results-list');
     const found = items.filter(function (e) {
-      return e.innerHTML.toLowerCase().includes(value);
+      const searchables = e.getElementsByClassName('searchable');
+      for (let item of searchables) {
+        if (
+          item.innerHTML.includes(value) ||
+          item.innerHTML.toLowerCase().includes(value) ||
+          item.innerHTML.toLowerCase().includes(value.toLowerCase()) ||
+          item.innerHTML.includes(value.toLowerCase())
+        ) {
+          return item.getElementsByTagName('li');
+        }
+      }
     });
     if (found.length > 0) {
       found.forEach(function (val) {
