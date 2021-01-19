@@ -111,6 +111,7 @@ async function ui() {
     $createAccountForm.show();
     $allStoriesList.hide();
     $('#searchbar').hide();
+    $('.search-results').hide();
   }
   /**
    * Event handler for Navigation to Homepage
@@ -124,6 +125,8 @@ async function ui() {
   EVENT HANDLER FOR NEW STORY LINK */
   $navCreateStory.on('click', function () {
     $allStoriesList.hide();
+    $('.search-results').hide();
+    $('#searchbar').hide();
     $('#favs-section').hide();
     $('#create-story').show();
     $('#create-story-form').show();
@@ -166,6 +169,7 @@ async function ui() {
 
     // show the stories
     $allStoriesList.show();
+    $('#searchbar').show();
 
     // update the navigation bar
     showNavForLoggedInUser();
@@ -396,6 +400,7 @@ async function ui() {
 
     $('#all-articles-list').hide();
     $('#searchbar').hide();
+    $('#search-results-list').hide();
     $('#create-story').hide();
     $('#favs-section').show();
 
@@ -507,9 +512,9 @@ async function ui() {
 
   $('#searchform').on('submit', function (e) {
     e.preventDefault();
-    // const $list = $('#search-results-list');
-    // $list.empty();
-    // let form = document.querySelector('#searchform');
+    const $list = $('#search-results-list');
+    $list.empty();
+    let form = document.querySelector('#searchform');
     let input = document.querySelector('#searchform input');
     if (input.value === '') {
       alert('please type search term');
@@ -539,20 +544,20 @@ async function ui() {
     const items = Array.from(
       document.querySelectorAll('#all-articles-list li')
     );
-    console.dir(items);
-    const itemsCopy = [];
-    for (let i = 0; i < items.length; i++) {
-      let newItem = items[i];
-      itemsCopy.push(newItem);
-    }
-    console.log(itemsCopy);
     const list = document.querySelector('#search-results-list');
-    const found = itemsCopy.filter(function (e) {
+    const found = items.filter(function (e) {
       return e.innerHTML.toLowerCase().includes(value);
     });
-    found.forEach(function (val) {
-      list.append(val);
-    });
+    if (found.length > 0) {
+      found.forEach(function (val) {
+        list.prepend(val);
+      });
+    } else {
+      const notFound = document.createElement('p');
+      notFound.setAttribute('id', 'not-found');
+      notFound.innerText = 'nothing found';
+      list.prepend(notFound);
+    }
   }
 }
 
