@@ -445,7 +445,9 @@ async function ui() {
     });
     if (found.length > 0) {
       found.forEach(function (val) {
-        list.prepend(val);
+        const filteredItem = document.createElement('li');
+        filteredItem.innerHTML = val.innerHTML;
+        list.prepend(filteredItem);
       });
     } else {
       const notFound = document.createElement('p');
