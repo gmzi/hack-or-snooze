@@ -9,6 +9,7 @@ async function ui() {
   const $navLogin = $('#nav-login');
   const $navLogOut = $('#nav-logout');
   const $navFavs = $('#nav-favs');
+  const $navMyStories = $('#nav-my-stories');
 
   const $navCreateStory = $('#nav-create-story');
   const $createStoryForm = $('#create-story-form');
@@ -190,7 +191,7 @@ async function ui() {
         <br>
         <small class="article-author">by <span class="searchable">${story.author}</span> | </small>
         <small class="article-username">posted by <span class="searchable">${story.username}</span> | </small>
-        <small class="article-hide">hide</small>
+        <small class="article-hide">delete</small>
       </li>
     `);
 
@@ -216,6 +217,26 @@ async function ui() {
 
       return storyMarkup;
     }
+    if (section === 'own') {
+      let hostName = getHostName(story.url);
+
+      // render story markup
+      const storyMarkup = $(`
+      <li id="${story.storyId}">
+        <small class="btn-fav">&#9734</small>
+        <small class="article-fav hidden" id="btn-fav-remove">&#9733</small>
+        <small class="title">
+          <a class="article-link" href="${story.url}" target="a_blank"><strong class="searchable">${story.title}</strong></a>
+          <small class="article-hostname ${hostName} searchable">(${hostName})</small>
+        </small>
+        <br>
+        <small class="article-author">by <span class="searchable">${story.author}</span> | </small>
+        <small class="article-username">posted by <span class="searchable">${story.username}</span> | </small>
+        <small class="article-hide">delete</small>
+      </li>
+    `);
+      return storyMarkup;
+    }
   }
 
   function showNavForLoggedInUser() {
@@ -223,6 +244,7 @@ async function ui() {
     $navLogOut.show();
     $navCreateStory.show();
     $navFavs.show();
+    $navMyStories.show();
     $('#nav-username').text(currentUser.username);
   }
 
@@ -336,6 +358,23 @@ async function ui() {
       $('#empty-favslist').hide();
     }
   }
+
+  /* VIEW MY CREATED STORIES */
+  $navMyStories.on('click', function (evt) {
+    $('#all-articles-list').hide();
+    $('#searchbar').hide();
+    $('#search-results-list').hide();
+    $('#create-story').hide();
+    $('#favs-section').hide();
+    $('#my-stories-section').show();
+    const ownStories = currentUser.ownStories;
+    const $myStoriesList = $('#my-stories-list');
+    for (let i = 0; i < ownStories.length; i++) {
+      console.log(ownStories[i]);
+      const result = generateStoryHTML(ownStories[i], 'own');
+      $myStoriesList.append(result.get()[0]);
+    }
+  });
 
   /* CLEAN ALL FAVORITES */
 

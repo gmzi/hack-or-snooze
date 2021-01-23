@@ -26,7 +26,10 @@
               | Create new story |
             </a>
             <a class="hidden" id="nav-favs" href="#">
-              My favorites
+              My favorites |
+            </a>
+            <a class="hidden" id="nav-my-stories" href="#">
+              My stories
             </a>
           </span>
         </td>
@@ -47,7 +50,7 @@
         <input id="author" required type="text" placeholder="author name">
       </div>
       <div>
-        <label for="title">title</label>
+        <label for="title">title</label>  
         <input id="title" required type="text" placeholder="article title">
       </div>
       <div>
@@ -169,6 +172,12 @@
     <ol id="favs-list">
     </ol>
     <button id="empty-favslist">remove all</button>
+  </section>
+  <section id="my-stories-section" class="hidden">
+    <h4 id="my-own-stories">My created stories</h4>
+    <h6 id="no-stories" class="hidden">No stories at all</h6>
+    <ol id="my-stories-list">
+    </ol>
   </section>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
